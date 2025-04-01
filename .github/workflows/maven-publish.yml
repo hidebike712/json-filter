@@ -1,0 +1,61 @@
+name: Release Library
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. 1.0.0)'
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # needed for tagging
+
+    - name: Set up Java and Maven Central credentials
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+        server-id: central
+        server-username: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+        server-password: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+        gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
+        gpg-passphrase: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
+
+    - name: Set release version
+      run: mvn versions:set -DnewVersion=${{ github.event.inputs.version }}
+
+    - name: Commit and tag release
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git commit -am "Release v${{ github.event.inputs.version }}"
+        git tag -a v${{ github.event.inputs.version }} -m "Release v${{ github.event.inputs.version }}"
+        git push origin main --follow-tags
+
+    - name: Build and test
+      run: mvn clean install -DskipTests=false
+
+    - name: Generate Javadoc
+      run: mvn javadoc:javadoc
+
+    - name: Deploy Javadoc to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./target/site/apidocs
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ github.event.inputs.version }}
+        name: Release v${{ github.event.inputs.version }}
+
+    - name: Deploy to Maven Central
+      run: mvn -P release --batch-mode deploy -DskipTests
