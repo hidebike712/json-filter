@@ -212,7 +212,7 @@ System.out.println(filtered);
 <dependency>
     <groupId>org.czeal</groupId>
     <artifactId>json-filter</artifactId>
-    <version>0.0.1</version>
+    <version>{version}</version>
 </dependency>
 ```
 
