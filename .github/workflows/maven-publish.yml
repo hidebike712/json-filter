@@ -11,10 +11,6 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
-    env:
-      MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
-      MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -35,22 +31,25 @@ jobs:
     - name: Set release version
       run: mvn versions:set -DnewVersion=${{ github.event.release.tag_name }}
 
-    - name: Build
-      run: mvn clean install -DskipTests=false
+    # - name: Build
+    #   run: mvn clean install -DskipTests=false
 
-    - name: Generate Javadoc
-      run: mvn javadoc:javadoc
+    # - name: Generate Javadoc
+    #   run: mvn javadoc:javadoc
 
-    - name: Deploy JavaDoc
-      uses: MathieuSoysal/Javadoc-publisher.yml@v3.0.2
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        javadoc-branch: gh-pages
-        java-version: 21
-        target-folder: '' # The URL will be https://<username>.github.io/<repo>/.
-        project: maven
+    # - name: Deploy JavaDoc
+    #   uses: MathieuSoysal/Javadoc-publisher.yml@v3.0.2
+    #   with:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     javadoc-branch: gh-pages
+    #     java-version: 21
+    #     target-folder: '' # The URL will be https://<username>.github.io/<repo>/.
+    #     project: maven
 
     - name: Deploy to Maven Central
+      env:
+        MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
       run: |
         echo "==== ~/.m2/settings.xml ===="
         cat ~/.m2/settings.xml || echo "settings.xml not found"
