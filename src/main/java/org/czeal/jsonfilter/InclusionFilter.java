@@ -56,9 +56,7 @@ public class InclusionFilter implements Filter
      *
      * <p><b>Example 1: For a flat JSON object</b></p>
      * <pre><code>
-     * Gson gson = new Gson();
-     *
-     * JsonElement jsonElement = gson.fromJson("{\"a\":1,\"b\":2,\"c\":3}");
+     * JsonElement jsonElement = JsonParser.parseString("{\"a\":1,\"b\":2,\"c\":3}");
      *
      * JsonElement filtered = new InclusionFilter().apply(jsonElement, "a,b");
      *
@@ -67,9 +65,7 @@ public class InclusionFilter implements Filter
      *
      * <p><b>Example 2: For a nested JSON object</b></p>
      * <pre><code>
-     * Gson gson = new Gson();
-     *
-     * JsonElement jsonElement = gson.fromJson("{\"x\":{\"y\":{\"z\":5},\"w\":10},\"v\":20}");
+     * JsonElement jsonElement = JsonParser.parseString("{\"x\":{\"y\":{\"z\":5},\"w\":10},\"v\":20}");
      *
      * JsonElement filtered = new InclusionFilter().apply(jsonElement, "x(y)");
      *
@@ -78,9 +74,7 @@ public class InclusionFilter implements Filter
      *
      * <p><b>Example 3: For nested arrays</b></p>
      * <pre><code>
-     * Gson gson = new Gson();
-     *
-     * JsonElement jsonElement = gson.fromJson("[[[{\"name\":\"john\",\"type\":0}]]]");
+     * JsonElement jsonElement = JsonParser.parseString("[[[{\"name\":\"john\",\"type\":0}]]]");
      *
      * JsonElement filtered = new InclusionFilter().apply(jsonElement, "name");
      *
