@@ -52,4 +52,7 @@ jobs:
 
     - name: Deploy to Maven Central
       run: |
+        echo "==== ~/.m2/settings.xml ===="
+        cat ~/.m2/settings.xml || echo "settings.xml not found"
+        echo "============================"
         mvn -P release --batch-mode deploy -DskipTests -Dgpg.passphrase=${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
