@@ -11,6 +11,10 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
+    env:
+      MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+      MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -26,7 +30,7 @@ jobs:
         server-username: MAVEN_USERNAME
         server-password: MAVEN_PASSWORD
         gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
-        gpg-passphrase: GPG_PASSPHRASE
+        gpg-passphrase: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
 
     - name: Set release version
       run: mvn versions:set -DnewVersion=${{ github.event.release.tag_name }}
@@ -47,9 +51,5 @@ jobs:
         project: maven
 
     - name: Deploy to Maven Central
-      env:
-        MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
-        MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
-        GPG_PASSPHRASE: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
       run: |
-        mvn -P release --batch-mode deploy -DskipTests -Dgpg.passphrase=${GPG_PASSPHRASE}
+        mvn -P release --batch-mode deploy -DskipTests -Dgpg.passphrase=${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
