@@ -5,7 +5,7 @@
 
     <groupId>org.czeal</groupId>
     <artifactId>json-filter</artifactId>
-    <version>0.0.2-rc8</version>
+    <version>0.0.2-rc9</version>
     <packaging>jar</packaging>
 
     <name>json-filter</name>
