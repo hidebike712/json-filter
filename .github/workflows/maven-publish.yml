@@ -28,13 +28,6 @@ jobs:
     - name: Set release version
       run: mvn versions:set -DnewVersion=${{ github.event.release.tag_name }}
 
-    - name: Commit release version
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        git commit -am "Release ${{ github.event.release.tag_name }}"
-        git push origin HEAD:main
-
     - name: Build and test
       run: mvn clean install -DskipTests=false
 
