@@ -50,6 +50,9 @@ jobs:
       env:
         MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
-        GPG_PASSPHRASE: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
       run: |
-        mvn -P release --batch-mode deploy -DskipTests
+        mvn \
+        --no-transfer-progress \
+        --batch-mode \
+        -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
+        clean deploy
