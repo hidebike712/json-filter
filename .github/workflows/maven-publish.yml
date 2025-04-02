@@ -4,6 +4,9 @@ on:
   release:
     types: [created]
 
+permissions:
+  contents: write # Needed to push to gh-pages
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -12,7 +15,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0 # needed for tagging
+        fetch-depth: 0 # Needed for tagging
 
     - name: Set up Java and Maven Central credentials
       uses: actions/setup-java@v4
@@ -38,7 +41,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./target/reports/apidocs
+        publish_dir: ./target/site/apidocs # Correct path for Maven Javadoc
 
     - name: Deploy to Maven Central
       run: mvn -P release --batch-mode deploy -DskipTests
