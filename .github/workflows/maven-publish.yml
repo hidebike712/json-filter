@@ -22,9 +22,6 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '21'
-        server-id: central
-        server-username: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
-        server-password: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
         gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
         gpg-passphrase: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
 
@@ -47,4 +44,12 @@ jobs:
         project: maven
 
     - name: Deploy to Maven Central
-      run: mvn -P release --batch-mode deploy -DskipTests -Dgpg.passphrase=${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
+      env:
+        MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+        GPG_PASSPHRASE: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
+      run: |
+        mvn --no-transfer-progress --batch-mode -P release \
+          -DskipTests \
+          -Dgpg.passphrase=${GPG_PASSPHRASE} \
+          deploy
