@@ -1,1 +1,0 @@
-tagSearchIndex = [{"l":"Example","h":"interface org.czeal.jsonfilter.Filter","d":"Section","u":"org/czeal/jsonfilter/Filter.html#example-heading"}];updateSearchResults();
