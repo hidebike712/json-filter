@@ -35,7 +35,7 @@ public class InclusionFilterTest
 
 
     @Test
-    @DisplayName("applying empty-key filtering to string")
+    @DisplayName("apply filtering with empty node to string")
     void testApply2() {
         JsonElement jsonElement = JsonParser.parseString("\"Hello World\"");
         JsonElement result = new InclusionFilter().apply(jsonElement, "");
