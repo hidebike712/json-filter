@@ -19,7 +19,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: '21'
+        java-version: '11'
         server-id: central
         server-username: MAVEN_USERNAME
         server-password: MAVEN_PASSWORD
@@ -35,7 +35,7 @@ jobs:
       env:
         MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
-        MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}  
+        MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
 
     - name: Generate Javadoc
       run: mvn javadoc:javadoc
@@ -45,6 +45,6 @@ jobs:
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         javadoc-branch: gh-pages
-        java-version: 21
+        java-version: 11
         target-folder: '' # The URL will be https://<username>.github.io/<repo>/.
         project: maven
